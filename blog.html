@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="first.css">
+</head>
+
+<body >
+    <div class="navbar">
+        <a href="about_me.html" target="_blank">About Me</a>
+        <a href="achievements.html" target="_blank">Achievements</a>
+        <a href="skills.html" target="_blank">Skills</a>
+        <a href="education.html" target="_blank">Education</a>
+        <a href="blog.html" target="_blank">Blog</a>
+    </div>
+
+
+<h1 class="fade-in" style="text-align: center; "> Blog</h1>
+    <div class="blog">
+
+        <div class="placeholder-blog" id="blog1">
+            <h2>Blog Title 1</h2>
+            <p>Blog content goes here.</p>
+            <button onclick="likeBlog('blog1')">Like</button>
+            <span id="likes_blog1">0 Likes</span>
+            <textarea placeholder="Add a comment..." id="comment_blog1"></textarea>
+            <button onclick="commentOnBlog('blog1')">Add Comment</button>
+            <ul id="comments_blog1"></ul>
+        </div>
+
+        
+        <div class="placeholder-blog" id="blog2">
+            <h2>Blog Title 2</h2>
+            <p>Blog content goes here.</p>
+            <button onclick="likeBlog('blog2')">Like</button>
+            <span id="likes_blog2">0 Likes</span>
+            <textarea placeholder="Add a comment..." id="comment_blog2"></textarea>
+            <button onclick="commentOnBlog('blog2')">Add Comment</button>
+            <ul id="comments_blog2"></ul>
+        </div>
+    </div>
+    <script>
+    function likeBlog(blogId) {
+        let likesCount = localStorage.getItem(`${blogId}_likes`) || 0;
+        likesCount = parseInt(likesCount) + 1;
+        document.getElementById(`likes_${blogId}`).innerText = `${likesCount} Likes`;
+        localStorage.setItem(`${blogId}_likes`, likesCount);
+    }
+
+    function commentOnBlog(blogId) {
+        const commentText = document.getElementById(`comment_${blogId}`).value;
+        if (commentText.trim() !== '') {
+            const commentsList = document.getElementById(`comments_${blogId}`);
+            const newComment = document.createElement('li');
+            newComment.innerText = commentText;
+            commentsList.appendChild(newComment);
+
+           
+            let storedComments = localStorage.getItem(`${blogId}_comments`) || '[]';
+            storedComments = JSON.parse(storedComments);
+            storedComments.push(commentText);
+            localStorage.setItem(`${blogId}_comments`, JSON.stringify(storedComments));
+
+            
+            document.getElementById(`comment_${blogId}`).value = '';
+        }
+    }
+
+    
+    function loadLikesAndComments(blogId) {
+        const likesCount = localStorage.getItem(`${blogId}_likes`) || 0;
+        document.getElementById(`likes_${blogId}`).innerText = `${likesCount} Likes`;
+
+        const storedComments = localStorage.getItem(`${blogId}_comments`);
+        if (storedComments) {
+            const commentsList = document.getElementById(`comments_${blogId}`);
+            const comments = JSON.parse(storedComments);
+            comments.forEach(commentText => {
+                const newComment = document.createElement('li');
+                newComment.innerText = commentText;
+                commentsList.appendChild(newComment);
+            });
+        }
+    }
+
+   
+    loadLikesAndComments('blog1');
+    loadLikesAndComments('blog2');
+    
+</script>
+<button onclick="toggleNightMode()" >Change mode</button>
+<script src="first.js"></script>
+</body>
+
